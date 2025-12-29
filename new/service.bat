@@ -10,18 +10,6 @@ if "%~1"=="status_zapret" (
     exit /b
 )
 
-if "%~1"=="check_updates" (
-    if exist "%~dp0utils\check_updates.enabled" (
-        if not "%~2"=="soft" (
-            start /b service check_updates soft
-        ) else (
-            call :service_check_updates soft
-        )
-    )
-
-    exit /b
-)
-
 if "%~1"=="load_game_filter" (
     call :game_switch_status
     exit /b
