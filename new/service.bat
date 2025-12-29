@@ -79,7 +79,6 @@ cls
 call :ipset_switch_status
 call :game_switch_status
 call :tls_hello_status
-call :check_updates_switch_status
 
 set "menu_choice=null"
 echo =========  !DS! - !elysium!  =========
@@ -753,37 +752,6 @@ echo %next% > "%tlsFile%"
 call :PrintYellow "Restart the zapret to apply the changes"
 pause
 goto menu
-
-
-:: CHECK UPDATES SWITCH =================
-:check_updates_switch_status
-chcp 437 > nul
-
-set "checkUpdatesFlag=%~dp0utils\check_updates.enabled"
-
-if exist "%checkUpdatesFlag%" (
-    set "CheckUpdatesStatus=enabled"
-) else (
-    set "CheckUpdatesStatus=disabled"
-)
-exit /b
-
-
-:check_updates_switch
-chcp 437 > nul
-cls
-
-if not exist "%checkUpdatesFlag%" (
-    echo Enabling check updates...
-    echo ENABLED > "%checkUpdatesFlag%"
-) else (
-    echo Disabling check updates...
-    del /f /q "%checkUpdatesFlag%"
-)
-
-pause
-goto menu
-
 
 :: IPSET SWITCH =======================
 :ipset_switch_status
