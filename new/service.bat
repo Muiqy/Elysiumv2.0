@@ -1,5 +1,7 @@
 @echo off
-set "LOCAL_VERSION=1.9.1"
+set "version=0.3a"
+set "elysium=[38;2;127;255;212mE[38;2;112;240;225ml[38;2;96;225;235my[38;2;80;210;240ms[38;2;64;195;245mi[38;2;48;180;250mu[38;2;32;165;255mm[0m"
+set "DS=[38;2;181;123;255mD[38;2;190;140;244mi[38;2;199;157;234ms[38;2;208;174;224mc[38;2;216;191;214mo[38;2;221;208;222mr[38;2;221;225;230md[0m"
 
 :: External commands
 if "%~1"=="status_zapret" (
@@ -36,19 +38,49 @@ if "%~1"=="load_custom_lists" (
 )
 
 if "%1"=="admin" (
-    call :check_command chcp
-    call :check_command find
-    call :check_command findstr
-    call :check_command netsh
-
     echo Started with admin rights
 ) else (
-    call :check_extracted
-    call :check_command powershell
-
-    echo Requesting admin rights...
+	echo	
+	echo                                               ..........         ..                 ..                        
+	echo                                       ..      ............      ........                                      
+	echo                                     ......................................                                    
+	echo                                  .........................................                                    
+	echo                                 ...........................................                                   
+	echo                             ...................................................                               
+	echo                             .....................-=@@@@@@#-.....................                              
+	echo                             ...................^@@@@@@@@@@@@#=..................                              
+	echo                        ......................=@@@@@@#@@@@@@@@@@-.................                             
+	echo                        .....................#@@@@##@#@#@@@@@@@@@...................                           
+	echo                        ....................=@@#=---=@--#@#-.=#@@#...................                          
+	echo                         ...................#@^......#-.=^.....-@#^-.................                          
+	echo                        ....................##=....=#=...@#.....#@#...................                         
+	echo                        ...................=##^-^@@#^..-.=@@@@^=@@#-...................                        
+	echo                        ...................^#^###@#@@####@@@@@@@@^#=...................                        
+	echo                       ....................^#=-.-#@@@@@@@@@@@=.--^@=...................                        
+	echo                       ....................^##@#..#@#@#@@@@@^.=@@@#-..................                         
+	echo                       .....................=#@#^^@@##^#^@@@@##@@@-...................                         
+	echo                       .....................-^#@#@^......=^@^@@%-...................                         
+	echo                       .......................=%=.............@-......................                        
+	echo                       .......................%#=............=@@=......................                        
+	echo                        ......................^%@=..........-@@@=......................                        
+	echo                        ......................=%@@@........=@@@@........................                       
+	echo                         .......................@@@#=^^=-^@%@^.........................                       
+	echo                          .......................^@@@@@@@@@%=..........................                       
+	echo                         .........................=@@@@@@@@@-..........................                        
+	echo                        ...........................=@@@@@@@............................                        
+	echo                        .  .........................======............................                         
+	echo                             .........................................................                         
+	echo                               ...........[38;2;255;255;255mBE..BETTER[0m...............................                        
+	echo                                  .................[38;2;60;100;255mWITHOUT[0m......................                               
+	echo                                   .......................[38;2;255;50;50mP.K.H[0m...............                                  
+	echo                                    ........................................                                   
+	echo                                      ........           ........    ........                                  
+	
+	
+	
     powershell -Command "Start-Process 'cmd.exe' -ArgumentList '/c \"\"%~f0\" admin\"' -Verb RunAs"
-    exit
+	timeout /t 2 >nul
+    exit /b
 )
 
 
@@ -62,18 +94,16 @@ call :tls_hello_status
 call :check_updates_switch_status
 
 set "menu_choice=null"
-echo =========  v!LOCAL_VERSION!  =========
+echo =========  !DS! - !elysium!  =========
 echo 1. Install Service
 echo 2. Remove Services
 echo 3. Check Status
 echo 4. Run Diagnostics
-echo 5. Check Updates
-echo 6. Switch Check Updates (%CheckUpdatesStatus%)
-echo 7. Switch Game Filter (%GameFilterStatus%)
-echo 8. Switch TLS hello (%TlsHelloStatus%)
-echo 9. Switch ipset (%IPsetStatus%)
-echo 10. Update ipset list
-echo 11. Run Tests
+echo 5. Switch Game Filter (%GameFilterStatus%)
+echo 6. Switch TLS hello (%TlsHelloStatus%)
+echo 7. Switch ipset (%IPsetStatus%)
+echo 8. Update ipset list
+echo 9. Run Tests
 echo 0. Exit
 set /p menu_choice=Enter choice (0-11): 
 
@@ -81,13 +111,11 @@ if "%menu_choice%"=="1" goto service_install
 if "%menu_choice%"=="2" goto service_remove
 if "%menu_choice%"=="3" goto service_status
 if "%menu_choice%"=="4" goto service_diagnostics
-if "%menu_choice%"=="5" goto service_check_updates
-if "%menu_choice%"=="6" goto check_updates_switch
-if "%menu_choice%"=="7" goto game_switch
-if "%menu_choice%"=="8" goto tls_hello_switch
-if "%menu_choice%"=="9" goto ipset_switch
-if "%menu_choice%"=="10" goto ipset_update
-if "%menu_choice%"=="11" goto run_tests
+if "%menu_choice%"=="5" goto game_switch
+if "%menu_choice%"=="6" goto tls_hello_switch
+if "%menu_choice%"=="7" goto ipset_switch
+if "%menu_choice%"=="8" goto ipset_update
+if "%menu_choice%"=="9" goto run_tests
 if "%menu_choice%"=="0" exit /b
 goto menu
 
@@ -320,56 +348,6 @@ reg add "HKLM\System\CurrentControlSet\Services\zapret" /v zapret-discord-youtub
 
 pause
 goto menu
-
-
-:: CHECK UPDATES =======================
-:service_check_updates
-chcp 437 > nul
-cls
-
-:: Set current version and URLs
-set "GITHUB_VERSION_URL=https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/.service/version.txt"
-set "GITHUB_RELEASE_URL=https://github.com/Flowseal/zapret-discord-youtube/releases/tag/"
-set "GITHUB_DOWNLOAD_URL=https://github.com/Flowseal/zapret-discord-youtube/releases/latest/download/zapret-discord-youtube-"
-
-:: Get the latest version from GitHub
-for /f "delims=" %%A in ('powershell -command "(Invoke-WebRequest -Uri \"%GITHUB_VERSION_URL%\" -Headers @{\"Cache-Control\"=\"no-cache\"} -UseBasicParsing -TimeoutSec 5).Content.Trim()" 2^>nul') do set "GITHUB_VERSION=%%A"
-
-:: Error handling
-if not defined GITHUB_VERSION (
-    echo Warning: failed to fetch the latest version. This warning does not affect the operation of zapret
-    timeout /T 9
-    if "%1"=="soft" exit 
-    goto menu
-)
-
-:: Version comparison
-if "%LOCAL_VERSION%"=="%GITHUB_VERSION%" (
-    echo Latest version installed: %LOCAL_VERSION%
-    
-    if "%1"=="soft" exit 
-    pause
-    goto menu
-) 
-
-echo New version available: %GITHUB_VERSION%
-echo Release page: %GITHUB_RELEASE_URL%%GITHUB_VERSION%
-
-set "CHOICE="
-set /p "CHOICE=Do you want to automatically download the new version? (Y/N) (default: Y) "
-if "%CHOICE%"=="" set "CHOICE=Y"
-if /i "%CHOICE%"=="y" set "CHOICE=Y"
-
-if /i "%CHOICE%"=="Y" (
-    echo Opening the download page...
-    start "" "%GITHUB_DOWNLOAD_URL%%GITHUB_VERSION%.rar"
-)
-
-
-if "%1"=="soft" exit 
-pause
-goto menu
-
 
 
 :: DIAGNOSTICS =========================
