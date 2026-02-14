@@ -1,8 +1,8 @@
 @echo off
 setlocal
 
-set "ZIP_URL=https://github.com/Muiqy/Elysiumv2.0/releases/download/v2.0/Elysium-v2.1.zip"
-set "ZIP_NAME=Elysium-v2.0.zip"
+set "ZIP_URL=https://github.com/Muiqy/Elysiumv2.0/releases/download/v2.2/Elysium-v2.2.zip"
+set "ZIP_NAME=Elysium-v2.2.zip"
 set "SCRIPT_DIR=%~dp0"
 
 cd /d "%SCRIPT_DIR%"
